@@ -18,6 +18,7 @@
 #define JUBATUS_CLASSIFIER_PA_HPP_
 
 #include <string>
+#include <pficommon/text/json/base.h>
 
 #include "classifier_base.hpp"
 
@@ -29,6 +30,7 @@ class PA : public classifier_base {
   explicit PA(storage::storage_base* storage);
   void train(const sfv_t& fv, const std::string& label);
   std::string name() const;
+  pfi::text::json::json to_json() const;
 };
 
 }  // namespace classifier

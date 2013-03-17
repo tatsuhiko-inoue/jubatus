@@ -20,6 +20,7 @@
 #include <string>
 #include <vector>
 #include <pficommon/data/intern.h>
+#include <pficommon/text/json/cast.h>
 
 using std::string;
 
@@ -247,6 +248,10 @@ bool local_storage_mixture::load(std::istream& is) {
 
 std::string local_storage_mixture::type() const {
   return "local_storage_mixture";
+}
+
+void local_storage_mixture::to_json(int vals, pfi::text::json::json& out) const {
+  out.add(new pfi::text::json::json_string("not implemented"));
 }
 
 }  // namespace storage

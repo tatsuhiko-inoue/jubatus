@@ -73,6 +73,7 @@ class local_storage_mixture : public storage_base {
   bool save(std::ostream& os);
   bool load(std::istream& is);
   std::string type() const;
+  void to_json(int vals, pfi::text::json::json& out) const;
 
  private:
   friend class pfi::data::serialization::access;

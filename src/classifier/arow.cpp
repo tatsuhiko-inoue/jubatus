@@ -88,6 +88,9 @@ void AROW::update(
 string AROW::name() const {
   return string("AROW");
 }
+pfi::text::json::json AROW::to_json() const {
+  return classifier_base::get_json(2);
+}
 
 }  // namespace classifier
 }  // namespace jubatus

@@ -186,6 +186,18 @@ bool classifier_serv::clear() {
   return true;
 }
 
+std::string classifier_serv::dump(const std::string& format) const {
+  if (format == "json") {
+    pfi::text::json::json out = classifier_->to_json();
+    std::stringstream outstring;
+    out.pretty(outstring, false);
+    return outstring.str();
+  } else {
+    LOG(WARNING) << "invalid format(" << format << ")dump required";
+    return "invalid format ";
+  }
+}
+
 void classifier_serv::check_set_config() const {
   if (!classifier_) {
     throw JUBATUS_EXCEPTION(config_not_set());

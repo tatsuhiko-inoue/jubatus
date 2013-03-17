@@ -23,9 +23,18 @@
 #include <string>
 #include <utility>
 #include <stdexcept>
+
 #include "storage_type.hpp"
 #include "../common/exception.hpp"
 #include "../common/type.hpp"
+
+namespace pfi {
+namespace text {
+namespace json {
+class json;
+}  // namespace json
+}  // namespace text
+}  // namespace pfi
 
 namespace jubatus {
 namespace storage {
@@ -77,6 +86,7 @@ class storage_base {
   virtual void clear() = 0;
 
   virtual std::string type() const = 0;
+  virtual void to_json(int vals, pfi::text::json::json& out) const = 0;
 };
 
 class storage_exception

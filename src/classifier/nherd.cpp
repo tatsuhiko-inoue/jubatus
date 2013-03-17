@@ -99,5 +99,9 @@ std::string NHERD::name() const {
   return string("NHERD");
 }
 
+pfi::text::json::json NHERD::to_json() const {
+  return classifier_base::get_json(2);
+}
+
 }  // namespace classifier
 }  // namespace jubatus

@@ -92,5 +92,9 @@ string CW::name() const {
   return string("CW");
 }
 
+pfi::text::json::json CW::to_json() const {
+  return classifier_base::get_json(2);
+}
+
 }  // namespace classifier
 }  // namespase jubatus

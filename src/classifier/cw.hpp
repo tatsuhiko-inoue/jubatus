@@ -18,6 +18,8 @@
 #define JUBATUS_CLASSIFIER_CW_HPP_
 
 #include <string>
+#include <pficommon/text/json/base.h>
+
 
 #include "classifier_base.hpp"
 
@@ -30,6 +32,7 @@ class CW : public classifier_base {
   CW(const classifier_config& config, storage::storage_base* storage);
   void train(const sfv_t& fv, const std::string& label);
   std::string name() const;
+  pfi::text::json::json to_json() const;
  private:
   void update(
     const sfv_t& fv,

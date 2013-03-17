@@ -19,6 +19,8 @@
 
 #include <string>
 
+#include <pficommon/text/json/base.h>
+
 #include "classifier_base.hpp"
 
 namespace jubatus {
@@ -29,6 +31,7 @@ class perceptron : public classifier_base {
   explicit perceptron(storage::storage_base* storage);
   void train(const sfv_t& sfv, const std::string& label);
   std::string name() const;
+  pfi::text::json::json to_json() const;
 };
 
 }  // namespace classifier

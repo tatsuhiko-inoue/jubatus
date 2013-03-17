@@ -19,9 +19,10 @@
 
 #include <map>
 #include <string>
-#include <pficommon/data/serialization.h>
-#include <pficommon/data/serialization/unordered_map.h>
 #include <pficommon/data/unordered_map.h>
+#include <pficommon/data/serialization.h>
+#include <pficommon/text/json/base.h>
+#include <pficommon/data/serialization/unordered_map.h>
 #include "storage_base.hpp"
 #include "../common/key_manager.hpp"
 
@@ -73,6 +74,7 @@ class local_storage : public storage_base {
   bool save(std::ostream&);
   bool load(std::istream&);
   std::string type() const;
+  void to_json(int vals, pfi::text::json::json& out) const;
 
  protected:
   // map_features3_t tbl_;

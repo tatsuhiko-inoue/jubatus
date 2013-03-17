@@ -54,5 +54,9 @@ string PA1::name() const {
   return string("PA1");
 }
 
+pfi::text::json::json PA1::to_json() const {
+  return classifier_base::get_json(1);
+}
+
 }  // namespace classifier
 }  // namespace jubatus

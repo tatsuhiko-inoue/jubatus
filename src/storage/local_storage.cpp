@@ -23,6 +23,8 @@
 #include <pficommon/data/serialization.h>
 #include <pficommon/data/serialization/unordered_map.h>
 
+#include <pficommon/text/json.h>
+
 using std::string;
 
 namespace jubatus {
@@ -158,10 +160,10 @@ void local_storage::bulk_update(
 }
 
 void local_storage::update(
-    const string& feature,
-    const string& inc_class,
-    const string& dec_class,
-    const val1_t& v) {
+  const string& feature,
+  const string& inc_class,
+  const string& dec_class,
+  const val1_t& v) {
   id_feature_val3_t& feature_row = tbl_[feature];
   feature_row[class2id_.get_id(inc_class)].v1 += v;
   feature_row[class2id_.get_id(dec_class)].v1 -= v;
@@ -187,6 +189,44 @@ bool local_storage::load(std::istream& is) {
 
 std::string local_storage::type() const {
   return "local_storage";
+}
+
+void local_storage::to_json(int vals, pfi::text::json::json& out) const {
+  using pfi::text::json::json;
+  using pfi::text::json::json_string;
+  using pfi::text::json::json_array;
+  using pfi::text::json::json_object;
+  using pfi::text::json::json_float;
+  out = new json_array();
+  for (id_features3_t::const_iterator feature = tbl_.begin();
+       feature != tbl_.end();
+       ++feature) {
+    json one_feature(new json_object());
+    one_feature["feature"] = new json_string(feature->first);
+    {
+      json classes(new json_array());
+      for (id_feature_val3_t::const_iterator klass = feature->second.begin();
+           klass != feature->second.end();
+           ++klass) {
+        json one_class(new json_object());
+        one_class["class_name"] = new json_string(class2id_.get_key(klass->first));
+        {
+          json val_array(new json_array());
+          val_array.add(new json_float(klass->second.v1));
+          if (2 <= vals) {
+            val_array.add(new json_float(klass->second.v2));
+          }
+          if (3 <= vals) {
+            val_array.add(new json_float(klass->second.v3));
+          }
+          one_class["value"] = val_array;
+        }
+        classes.add(one_class);
+      }
+      one_feature["feature_value"] = classes;
+    }
+    out.add(one_feature);
+  }
 }
 
 }  // namespace storage

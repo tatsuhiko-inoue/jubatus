@@ -156,5 +156,18 @@ float classifier_base::squared_norm(const sfv_t& fv) {
   return ret;
 }
 
+pfi::text::json::json classifier_base::get_json(int num) const {
+  using pfi::text::json::json;
+  using pfi::text::json::json_object;
+  using pfi::text::json::json_string;
+
+  pfi::text::json::json result = json(new json_object);
+  result["type"] = new json_string(name());
+  pfi::text::json::json model_json;
+  storage_->to_json(num, model_json);
+  result["model"] = model_json;
+  return result;
+}
+
 }  // namespace classifier
 }  // namespace jubatus

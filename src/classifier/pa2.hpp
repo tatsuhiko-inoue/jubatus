@@ -18,6 +18,7 @@
 #define JUBATUS_CLASSIFIER_PA2_HPP_
 
 #include <string>
+#include <pficommon/text/json/base.h>
 
 #include "classifier_base.hpp"
 
@@ -31,6 +32,7 @@ class PA2 : public classifier_base {
 
   void train(const sfv_t& sfv, const std::string& label);
   std::string name() const;
+  pfi::text::json::json to_json() const;
  private:
   classifier_config config;
 };

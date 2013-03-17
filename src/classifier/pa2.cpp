@@ -52,5 +52,9 @@ string PA2::name() const {
   return string("PA2");
 }
 
+pfi::text::json::json PA2::to_json() const {
+  return classifier_base::get_json(1);
+}
+
 }  // namespace classifier
 }  // namespace jubatus

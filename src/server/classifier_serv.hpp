@@ -59,6 +59,8 @@ class classifier_serv : public framework::server_base {
 
   bool clear();
 
+  std::string dump(const std::string& format) const;
+
   void check_set_config() const;
 
  private:

@@ -19,6 +19,7 @@ namespace server {
 template <class Impl>
 class classifier : public jubatus::common::mprpc::rpc_server {
  public:
+
   explicit classifier(double timeout_sec) : rpc_server(timeout_sec) {
     Impl* impl = static_cast<Impl*>(this);
     rpc_server::add<std::string(std::string)>("get_config", pfi::lang::bind(
@@ -38,6 +39,8 @@ class classifier : public jubatus::common::mprpc::rpc_server {
     rpc_server::add<std::map<std::string, std::map<std::string, std::string> >(
         std::string)>("get_status", pfi::lang::bind(&Impl::get_status, impl,
          pfi::lang::_1));
+    rpc_server::add<std::string(std::string, std::string)>("dump", pfi::lang::bind(
+        &Impl::dump, impl, pfi::lang::_1, pfi::lang::_2));
   }
 };
 
