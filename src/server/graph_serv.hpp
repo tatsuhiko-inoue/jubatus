@@ -14,8 +14,10 @@
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
-#pragma once
+#ifndef JUBATUS_SERVER_GRAPH_SERV_HPP_
+#define JUBATUS_SERVER_GRAPH_SERV_HPP_
 
+#include "../common/exception.hpp"
 #include "../common/global_id_generator.hpp"
 #include "../framework.hpp"
 #include "../framework/mixer/mixer.hpp"
@@ -54,6 +56,18 @@ struct mixable_graph : public framework::mixable<jubatus::graph::graph_base, std
   {
     get_model()->set_mixed_and_clear_diff(v);
   };
+
+  std::string get_pull_argument_impl() const {
+    throw JUBATUS_EXCEPTION(unsupported_method("get_pull_argument"));
+  }
+
+  std::string pull_impl(const std::string&) const {
+    throw JUBATUS_EXCEPTION(unsupported_method("pull"));
+  }
+
+  void push_impl(const std::string&) {
+    throw JUBATUS_EXCEPTION(unsupported_method("push"));
+  }
 };
 
 class graph_serv : public framework::server_base {
@@ -133,3 +147,5 @@ private:
 
 }
 }
+
+#endif  // JUBATUS_SERVER_GRAPH_SERV_HPP_

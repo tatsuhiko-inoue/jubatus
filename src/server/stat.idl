@@ -42,7 +42,7 @@ service stat {
   #@cht(1) #@analysis #@pass
   double moment(0: string name, 1: string key, 2: int n, 3: double c)
 
-  #@broadcast #@update #@all_and
+  #@broadcast #@nolock #@all_and
   bool save(0: string name, 1: string id) # #@broadcast
 
   #@broadcast #@update #@all_and

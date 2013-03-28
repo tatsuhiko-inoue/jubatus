@@ -14,7 +14,8 @@
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
-#pragma once
+#ifndef JUBATUS_FRAMEWORK_MIXABLE_HPP_
+#define JUBATUS_FRAMEWORK_MIXABLE_HPP_
 
 #include <string>
 #include <iostream>
@@ -32,9 +33,17 @@ class mixable0 {
 public:
   mixable0() {}
   virtual ~mixable0() {}
+
+  // interface for linear_mixer
   virtual std::string get_diff() const = 0;
   virtual void put_diff(const std::string&) = 0;
   virtual void mix(const std::string&, const std::string&, std::string&) const = 0;
+
+  // interface for random_mixer
+  virtual std::string get_pull_argument() const = 0;
+  virtual std::string pull(const std::string&) const = 0;
+  virtual void push(const std::string&) = 0;
+
   virtual void save(std::ostream & ofs) = 0;
   virtual void load(std::istream & ifs) = 0;
   virtual void clear() = 0;
@@ -63,7 +72,7 @@ protected:
   std::vector<mixable0*> mixables_;
 };
 
-template <typename Model, typename Diff>
+template <typename Model, typename Diff, typename PullArg = std::string>
 class mixable : public mixable0 {
  public:
   typedef Model model_type;
@@ -77,6 +86,10 @@ class mixable : public mixable0 {
   virtual Diff get_diff_impl() const = 0;
   virtual void put_diff_impl(const Diff&) = 0;
   virtual void mix_impl(const Diff&, const Diff&, Diff&) const = 0;
+
+  virtual PullArg get_pull_argument_impl() const = 0;
+  virtual Diff pull_impl(const PullArg&) const = 0;
+  virtual void push_impl(const Diff&) = 0;
 
   void set_model(model_ptr m){
     model_ = m;
@@ -111,6 +124,38 @@ class mixable : public mixable0 {
     pack_(mixed, mixed_string);
   }
 
+  std::string get_pull_argument() const {
+    if(model_){
+      std::string buf;
+      pack_(get_pull_argument_impl(), buf);
+      return buf;
+    }else{
+      throw JUBATUS_EXCEPTION(config_not_set());
+    }
+  }
+
+  std::string pull(const std::string& a) const {
+    if(model_){
+      std::string buf;
+      PullArg arg;
+      unpack_(a, arg);
+      pack_(pull_impl(arg), buf);
+      return buf;
+    }else{
+      throw JUBATUS_EXCEPTION(config_not_set());
+    }
+  }
+
+  void push(const std::string& d) {
+    if(model_){
+      Diff diff;
+      unpack_(d, diff);
+      push_impl(diff);
+    }else{
+      throw JUBATUS_EXCEPTION(config_not_set());
+    }
+  }
+
   void save(std::ostream & os){
     model_->save(os);
   }
@@ -122,13 +167,15 @@ class mixable : public mixable0 {
   model_ptr get_model() const { return model_; }
 
 private:
-  void unpack_(const std::string& buf, Diff& d) const {
+  template<typename T>
+  void unpack_(const std::string& buf, T& d) const {
     msgpack::unpacked msg;
     msgpack::unpack(&msg, buf.c_str(), buf.size());
     msg.get().convert(&d);
   }
 
-  void pack_(const Diff& d, std::string& buf) const {
+  template<typename T>
+  void pack_(const T& d, std::string& buf) const {
     msgpack::sbuffer sbuf;
     msgpack::pack(sbuf, d);
     buf = std::string(sbuf.data(), sbuf.size());
@@ -139,3 +186,5 @@ private:
 
 } //server
 } //jubatus
+
+#endif  // JUBATUS_FRAMEWORK_MIXABLE_HPP_

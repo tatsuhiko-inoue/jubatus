@@ -14,7 +14,8 @@
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
-#pragma once
+#ifndef JUBATUS_SERVER_TEST_UTIL_HPP_
+#define JUBATUS_SERVER_TEST_UTIL_HPP_
 
 #include <string>
 #include <iostream>
@@ -91,3 +92,4 @@ std::string config_to_string(const jubatus::fv_converter::converter_config& conf
 }
 
 
+#endif  // JUBATUS_SERVER_TEST_UTIL_HPP_

@@ -14,7 +14,8 @@
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
-#pragma once
+#ifndef JUBATUS_SERVER_CLASSIFIER_SERV_HPP_
+#define JUBATUS_SERVER_CLASSIFIER_SERV_HPP_
 
 #include <vector>
 #include <pficommon/lang/scoped_ptr.h>
@@ -68,3 +69,5 @@ private:
 
 }
 }
+
+#endif  // JUBATUS_SERVER_CLASSIFIER_SERV_HPP_

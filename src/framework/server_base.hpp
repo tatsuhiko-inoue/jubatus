@@ -14,13 +14,15 @@
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
-#pragma once
+#ifndef JUBATUS_FRAMEWORK_SERVER_BASE_HPP_
+#define JUBATUS_FRAMEWORK_SERVER_BASE_HPP_
 
 #include <stdint.h>
 #include <map>
 #include <string>
 #include <vector>
 #include <pficommon/concurrent/rwmutex.h>
+#include <pficommon/concurrent/mutex.h>
 #include <pficommon/lang/shared_ptr.h>
 #include "server_util.hpp"
 #include "mixable.hpp"
@@ -43,7 +45,7 @@ public:
   virtual pfi::lang::shared_ptr<mixable_holder> get_mixable_holder() const = 0;
   virtual void get_status(status_t& status) const = 0;
 
-  virtual bool save(const std::string& id);
+  virtual bool save(const std::string& id) const;
   virtual bool load(const std::string& id);
   void event_model_updated();
 
@@ -61,8 +63,12 @@ public:
 
 private:
   const server_argv argv_;
+
+  // I select single lock, but stripe lock may be preffered if use [save] so hard.
+  mutable pfi::concurrent::mutex filesave_mutex_;
   uint64_t update_count_;
 };
 
-}
-}
+}} // namespace jubatus::framework
+
+#endif  // JUBATUS_FRAMEWORK_SERVER_BASE_HPP_

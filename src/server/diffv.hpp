@@ -14,7 +14,8 @@
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
-#pragma once
+#ifndef JUBATUS_SERVER_DIFFV_HPP_
+#define JUBATUS_SERVER_DIFFV_HPP_
 
 #include "../storage/storage_type.hpp"
 #include <pficommon/network/mprpc.h>
@@ -48,3 +49,5 @@ public:
 };
 
 }
+
+#endif  // JUBATUS_SERVER_DIFFV_HPP_

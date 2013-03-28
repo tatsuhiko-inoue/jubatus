@@ -14,11 +14,13 @@
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
-#pragma once
+#ifndef JUBATUS_SERVER_RECOMMENDER_SERV_HPP_
+#define JUBATUS_SERVER_RECOMMENDER_SERV_HPP_
 
 #include <string>
 #include <vector>
 
+#include "../common/exception.hpp"
 #include "../common/lock_service.hpp"
 #include "../common/shared_ptr.hpp"
 #include "../framework/mixable.hpp"
@@ -48,6 +50,18 @@ struct rcmdr : public framework::mixable<jubatus::recommender::recommender_base,
                 std::string& mixed) const {
     mixed = lhs;
     get_model()->get_const_storage()->mix(rhs, mixed);
+  }
+
+  std::string get_pull_argument_impl() const {
+    throw JUBATUS_EXCEPTION(unsupported_method("get_pull_argument"));
+  }
+
+  std::string pull_impl(const std::string&) const {
+    throw JUBATUS_EXCEPTION(unsupported_method("pull"));
+  }
+
+  void push_impl(const std::string&) {
+    throw JUBATUS_EXCEPTION(unsupported_method("push"));
   }
 
   void clear() {}
@@ -108,3 +122,5 @@ private:
 
 } // namespace server
 } // namespace jubatus
+
+#endif  // JUBATUS_SERVER_RECOMMENDER_SERV_HPP_

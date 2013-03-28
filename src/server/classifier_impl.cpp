@@ -26,7 +26,7 @@ public:
   { JRLOCK__(p_); return get_p()->classify(data); }
 
   bool save(std::string name, std::string id) //update broadcast
-  { JWLOCK__(p_); return get_p()->save(id); }
+  { return get_p()->save(id); }
 
   bool load(std::string name, std::string id) //update broadcast
   { JWLOCK__(p_); return get_p()->load(id); }

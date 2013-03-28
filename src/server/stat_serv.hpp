@@ -14,8 +14,10 @@
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
-#pragma once
+#ifndef JUBATUS_SERVER_STAT_SERV_HPP_
+#define JUBATUS_SERVER_STAT_SERV_HPP_
 
+#include "../common/exception.hpp"
 #include "../stat/mixable_stat.hpp"
 #include "../framework.hpp"
 #include "../framework/mixer/mixer.hpp"
@@ -43,6 +45,18 @@ public:
 
   void put_diff_impl(const std::pair<double,size_t>& v) {
     get_model()->put_diff(v);
+  }
+
+  std::string get_pull_argument_impl() const {
+    throw JUBATUS_EXCEPTION(unsupported_method("get_pull_argument"));
+  }
+
+  std::pair<double, size_t> pull_impl(const std::string&) const {
+    throw JUBATUS_EXCEPTION(unsupported_method("pull"));
+  }
+
+  void push_impl(const std::pair<double, size_t>&) {
+    throw JUBATUS_EXCEPTION(unsupported_method("push"));
   }
 
 };
@@ -77,3 +91,5 @@ private:
 
 }
 } // namespace jubatus
+
+#endif  // JUBATUS_SERVER_STAT_SERV_HPP_

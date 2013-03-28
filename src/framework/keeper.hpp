@@ -14,7 +14,8 @@
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
-#pragma once
+#ifndef JUBATUS_FRAMEWORK_KEEPER_HPP_
+#define JUBATUS_FRAMEWORK_KEEPER_HPP_
 
 #include <string>
 #include <vector>
@@ -262,3 +263,5 @@ class keeper : public pfi::network::mprpc::rpc_server {
 
 }
 } //namespace jubatus
+
+#endif  // JUBATUS_FRAMEWORK_KEEPER_HPP_

@@ -47,7 +47,7 @@ classifier_serv::classifier_serv(const framework::server_argv& a,
   clsfer_.set_model(make_model(a));
   wm_.set_model(mixable_weight_manager::model_ptr(new weight_manager));
 
-  mixer_.reset(mixer::create_mixer(a, zk));
+  mixer_.reset(mixer::create_mixer(a, zk, "linear_mixer"));
   mixable_holder_.reset(new mixable_holder());
 
   mixer_->set_mixable_holder(mixable_holder_);
@@ -76,6 +76,8 @@ int classifier_serv::set_config(const config_data& config) {
   converter_ = converter;
   (*converter_).set_weight_manager(wm_.get_model());
 
+  wm_.set_model(mixable_weight_manager::model_ptr(new weight_manager));
+
   classifier_.reset(classifier_factory::create_classifier(config.method, clsfer_.get_model().get()));
 
   // FIXME: switch the function when set_config is done
@@ -95,7 +97,7 @@ int classifier_serv::train(const vector<pair<string, jubatus::datum> >& data) {
   int count = 0;
   sfv_t v;
   fv_converter::datum d;
-  
+
   for (size_t i = 0; i < data.size(); ++i) {
     convert<jubatus::datum, fv_converter::datum>(data[i].second, d);
     converter_->convert_and_update_weight(d, v);
@@ -120,9 +122,11 @@ classifier_serv::classify(const vector<jubatus::datum>& data) const {
     convert<datum, fv_converter::datum>(data[i], d);
     converter_->convert(d, v);
 
+    wm_.get_model()->get_weight(v);
+
     classify_result scores;
     classifier_->classify_with_scores(v, scores);
-    
+
     vector<estimate_result> r;
     for (vector<classify_result_elem>::const_iterator p = scores.begin();
          p != scores.end(); ++p) {

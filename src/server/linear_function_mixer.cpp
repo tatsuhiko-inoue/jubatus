@@ -51,6 +51,21 @@ void linear_function_mixer::put_diff_impl(const diffv& v) {
   get_model()->set_average_and_clear_diff(v.v);
 }
 
+string linear_function_mixer::get_pull_argument_impl() const {
+  return string();
+}
+
+diffv linear_function_mixer::pull_impl(const std::string&) const {
+  return get_diff_impl();
+}
+
+void linear_function_mixer::push_impl(const diffv& v) {
+  diffv w = get_diff_impl();
+  diffv mixed;
+  mix_impl(v, w, mixed);
+  put_diff_impl(mixed);
+}
+
 void linear_function_mixer::clear() {
 }
 

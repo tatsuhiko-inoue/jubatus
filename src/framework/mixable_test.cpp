@@ -41,7 +41,19 @@ class mixable_int : public mixable<int_model, int> {
   void mix_impl(const int& lhs, const int& rhs, int& mixed) const {
     mixed = lhs + rhs;
   }
-  
+
+  string get_pull_argument_impl() const {
+    return string();
+  }
+
+  int pull_impl(const string&) const {
+    return get_diff_impl();
+  }
+
+  void push_impl(const int& d) {
+    put_diff_impl(d + diff_);
+  }
+
   void add(int n) {
     diff_ += n;
   }

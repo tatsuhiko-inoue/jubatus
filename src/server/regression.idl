@@ -40,7 +40,7 @@ service regression {
   #@random #@analysis #@pass
   list<float>  estimate(0: string name, 1: list<datum>  estimate_data) # //@random
 
-  #@broadcast #@update #@all_and
+  #@broadcast #@nolock #@all_and
   bool save(0: string name, 1: string arg1) # //@broadcast
 
   #@broadcast #@update #@all_and

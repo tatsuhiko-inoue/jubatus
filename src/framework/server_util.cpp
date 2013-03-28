@@ -55,6 +55,7 @@ namespace jubatus { namespace framework {
 #ifdef HAVE_ZOOKEEPER_H
     p.add<std::string>("zookeeper", 'z', "zookeeper location", false);
     p.add<std::string>("name", 'n', "learning machine instance name", false);
+    p.add<std::string>("mixer", 'm', "mixer strategy", false, "");
     p.add("join", 'j', "join to the existing cluster");
     p.add<int>("interval_sec", 's', "mix interval by seconds", false, 16);
     p.add<int>("interval_count", 'i', "mix interval by update count", false, 512);
@@ -76,6 +77,9 @@ namespace jubatus { namespace framework {
     timeout = p.get<int>("timeout");
     program_name = jubatus::util::get_program_name();
     tmpdir = p.get<std::string>("tmpdir");
+#ifdef HAVE_ZOOKEEPER_H
+    mixer = p.get<std::string>("mixer");
+#endif
 
     //    eth = "localhost";
     eth = jubatus::common::get_default_v4_address();
@@ -97,7 +101,7 @@ namespace jubatus { namespace framework {
     if(z != "" and name == ""){
       throw JUBATUS_EXCEPTION(argv_error("can't start multinode mode without name specified"));
     }
-    
+
     LOG(INFO) << boot_message(jubatus::util::get_program_name());
   };
 
@@ -106,6 +110,14 @@ namespace jubatus { namespace framework {
     tmpdir("/tmp"), eth("localhost"), interval_sec(5), interval_count(1024)
   {
   };
+
+  std::string server_argv::my_id() const {
+#ifdef HAVE_ZOOKEEPER_H 
+    return common::build_loc_str(eth, port);
+#else
+    return "";
+#endif
+  }
 
   std::string server_argv::boot_message(const std::string& progname) const {
     std::stringstream ret;

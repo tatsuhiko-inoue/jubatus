@@ -14,7 +14,8 @@
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
-#pragma once
+#ifndef JUBATUS_FRAMEWORK_SERVER_UTIL_HPP_
+#define JUBATUS_FRAMEWORK_SERVER_UTIL_HPP_
 
 #include <cstdlib>
 #include <string>
@@ -27,6 +28,7 @@
 #include "../common/lock_service.hpp"
 #include "../common/shared_ptr.hpp"
 #include "../common/util.hpp"
+#include "../common/membership.hpp"
 #include <pficommon/lang/noncopyable.h>
 #include <pficommon/concurrent/lock.h>
 #include <pficommon/concurrent/rwmutex.h>
@@ -61,6 +63,7 @@ struct server_argv {
   std::string name;
   std::string tmpdir;
   std::string eth;
+  std::string mixer;
   int interval_sec;
   int interval_count;
 
@@ -70,6 +73,7 @@ struct server_argv {
   bool is_standalone() const {
     return (z == "");
   }
+  std::string my_id() const;
   std::string boot_message(const std::string& progname) const;
 };
 
@@ -79,7 +83,7 @@ std::string get_server_identifier(const server_argv& a);
 struct keeper_argv {
   keeper_argv(int args, char** argv, const std::string& t);
   keeper_argv();
-  
+
   int port;
   int timeout;
   int threadnum;
@@ -124,3 +128,5 @@ pfi::lang::shared_ptr<fv_converter::datum_to_fv_converter>
 make_fv_converter(const std::string& config);
 
 }}
+
+#endif  // JUBATUS_FRAMEWORK_SERVER_UTIL_HPP_

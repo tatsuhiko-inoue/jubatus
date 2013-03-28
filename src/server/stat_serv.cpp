@@ -33,7 +33,7 @@ stat_serv::stat_serv(const server_argv& a,
   common::cshared_ptr<stat::mixable_stat> model(new stat::mixable_stat(config_.window_size));
   stat_.set_model(model);
 
-  mixer_.reset(mixer::create_mixer(a, zk));
+  mixer_.reset(mixer::create_mixer(a, zk, "linear_mixer"));
   mixable_holder_.reset(new mixable_holder());
 
   mixer_->set_mixable_holder(mixable_holder_);

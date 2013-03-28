@@ -53,12 +53,12 @@ bool server_helper_impl::prepare_for_start(const server_argv& a, bool use_cht) {
   if (!a.is_standalone()) {
     ls = zk_;
     common::prepare_jubatus(*zk_, a.type, a.name);
-    
+
     if (a.join) { // join to the existing cluster with -j option
       LOG(INFO) << "joining to the cluseter " << a.name;
       LOG(ERROR) << "join is not supported yet :(";
     }
-    
+
     if (use_cht) {
       jubatus::common::cht::setup_cht_dir(*zk_, a.type, a.name);
       jubatus::common::cht ht(zk_, a.type, a.name);

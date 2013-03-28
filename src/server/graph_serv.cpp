@@ -74,7 +74,7 @@ graph_serv::graph_serv(const framework::server_argv& a,
   idgen_.set_ls(zk_, counter_path);
 #endif
 
-  mixer_.reset(mixer::create_mixer(a, zk));
+  mixer_.reset(mixer::create_mixer(a, zk, "linear_mixer"));
   mixable_holder_.reset(new mixable_holder());
 
   mixer_->set_mixable_holder(mixable_holder_);

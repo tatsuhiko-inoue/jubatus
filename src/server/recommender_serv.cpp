@@ -38,7 +38,7 @@ namespace server {
 recommender_serv::recommender_serv(const server_argv& a,
                                    const cshared_ptr<lock_service>& zk)
     : server_base(a) {
-  mixer_.reset(mixer::create_mixer(a, zk));
+  mixer_.reset(mixer::create_mixer(a, zk, "linear_mixer"));
   mixable_holder_.reset(new mixable_holder());
   wm_.set_model(mixable_weight_manager::model_ptr(new fv_converter::weight_manager));
 
@@ -69,7 +69,7 @@ int recommender_serv::set_config(config_data config) {
   (*converter_).set_weight_manager(wm_.get_model());
   return 0;
 }
-  
+
 config_data recommender_serv::get_config() {
   check_set_config();
   return config_;
@@ -105,7 +105,8 @@ int recommender_serv::clear() {
   return 0;
 }
 
-common::cshared_ptr<recommender::recommender_base> recommender_serv::make_model() {
+common::cshared_ptr<recommender::recommender_base>
+recommender_serv::make_model() {
   return cshared_ptr<recommender::recommender_base>
     (recommender::create_recommender(config_.method));
 }  

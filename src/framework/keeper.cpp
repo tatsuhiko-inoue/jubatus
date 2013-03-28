@@ -16,6 +16,7 @@
 
 #include "keeper.hpp"
 
+#include <cstdlib>
 #include <iostream>
 #include <glog/logging.h>
 
@@ -44,6 +45,7 @@ keeper::~keeper(){
 int keeper::run()
 {
   try {
+    ::atexit(jubatus::framework::atexit);
     jubatus::util::set_exit_on_term();
     jubatus::util::ignore_sigpipe();
     if (this->serv(a_.port, a_.threadnum)) {

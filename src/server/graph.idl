@@ -91,7 +91,7 @@ service graph {
   #@cht #@analysis #@pass
   edge_info get_edge(0: string name, 1: string nid, 2: ulong e) # //@cht
 
-  #@broadcast #@update #@all_and
+  #@broadcast #@nolock #@all_and
   bool save(0: string name, 1: string arg1)
 
   #@broadcast #@update #@all_and

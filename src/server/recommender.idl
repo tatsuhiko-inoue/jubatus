@@ -67,7 +67,7 @@ service recommender {
   #@random #@analysis #@pass
   float l2norm(0: string name, 1: datum d) # //@random
 
-  #@broadcast #@update #@all_and
+  #@broadcast #@nolock #@all_and
   bool save(0: string name, 1: string id) # //@broadcast
 
   #@broadcast #@update #@all_and

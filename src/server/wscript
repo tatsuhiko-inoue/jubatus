@@ -1,3 +1,4 @@
+# -*- python -*-
 def options(opt):
   pass
 
@@ -5,7 +6,7 @@ def configure(conf):
   pass
 
 
-def build_one(bld, name, libraries = '', sources = ''):
+def build_one(bld, name, libraries = '', sources = '', dotest = True):
   __sources = '%s_impl.cpp %s_serv.cpp ' % (name, name)
   __sources += sources
 
@@ -13,7 +14,7 @@ def build_one(bld, name, libraries = '', sources = ''):
     source = __sources,
     target = 'juba'+name,
     includes = '.',
-    use = 'jubatus_framework jubacommon_mprpc jubatus_%s %s' % (name, libraries)
+    use = 'jubatus_framework jubacommon_mprpc jubatus_%s %s column_table' % (name, libraries)
     )
   if bld.env.HAVE_ZOOKEEPER_H:
     bld.program(
@@ -22,13 +23,14 @@ def build_one(bld, name, libraries = '', sources = ''):
       includes = '.',
       use = 'PFICOMMON jubatus_framework jubacommon_mprpc'
       )
-  bld.program(
-    features = 'gtest',
-    source = '%s_test.cpp' % name,
-    target = '%s_test' % name,
-    includes = '.',
-    use = 'PFICOMMON MSGPACK jubacommon_mprpc',
-    )
+  if dotest:
+    bld.program(
+      features = 'gtest',
+      source = '%s_test.cpp' % name,
+      target = '%s_test' % name,
+      includes = '.',
+      use = 'PFICOMMON MSGPACK jubacommon_mprpc',
+      )
 
 
 def build(bld):
@@ -57,17 +59,19 @@ def build(bld):
     use = 'PFICOMMON jubaconverter jubastorage jubaserver jubatus_recommender jubatus_framework')
 
   #new classifier
-  build_one(bld, "classifier", 'jubaconverter jubastorage jubaserver')
+  build_one(bld, 'classifier', 'jubaconverter jubastorage jubaserver', 'linear_function_mixer.cpp')
 
   # #new regression
-  build_one(bld, "regression", 'jubaconverter jubastorage jubaserver')
+  build_one(bld, 'regression', 'jubaconverter jubastorage jubaserver', 'linear_function_mixer.cpp')
 
   # #new recommender
-  build_one(bld, "recommender", 'jubaconverter jubastorage jubaserver')
+  build_one(bld, 'recommender', 'jubaconverter jubastorage jubaserver')
 
-  build_one(bld, "stat")
+  build_one(bld, 'stat')
 
-  build_one(bld, "graph")
+  build_one(bld, 'graph')
+
+  build_one(bld, 'nearest_neighbor', 'column_table', 'mixable_versioned_table.cpp')
 
   n = bld.path.get_bld().make_node('test_input')
   n.mkdir()
@@ -78,6 +82,8 @@ def build(bld):
   bld.install_files('${PREFIX}/include/jubatus/client', [
       'classifier_types.hpp',
       'classifier_client.hpp',
+      'nearest_neighbor_types.hpp',
+      'nearest_neighbor_client.hpp',
       'regression_types.hpp',
       'regression_client.hpp',
       'recommender_types.hpp',
@@ -94,4 +100,5 @@ def build(bld):
       'recommender.idl',
       'stat.idl',
       'graph.idl',
+      'nearest_neighbor.idl',
       ])

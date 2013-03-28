@@ -62,7 +62,7 @@ public:
   { JRLOCK__(p_); return get_p()->get_edge(nid, e); }
 
   bool save(std::string name, std::string arg1) //update broadcast
-  { JWLOCK__(p_); return get_p()->save(arg1); }
+  { return get_p()->save(arg1); }
 
   bool load(std::string name, std::string arg1) //update broadcast
   { JWLOCK__(p_); return get_p()->load(arg1); }

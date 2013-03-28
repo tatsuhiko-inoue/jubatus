@@ -47,7 +47,7 @@ regression_serv::regression_serv(const framework::server_argv& a,
   gresser_.set_model(make_model(a));
   wm_.set_model(mixable_weight_manager::model_ptr(new weight_manager));
 
-  mixer_.reset(mixer::create_mixer(a, zk));
+  mixer_.reset(mixer::create_mixer(a, zk, "linear_mixer"));
   mixable_holder_.reset(new mixable_holder());
 
   mixer_->set_mixable_holder(mixable_holder_);

@@ -63,6 +63,9 @@ struct mixable_string : public mixable0 {
     ss << "(" << lhs << "+" << rhs << ")";
     mixed = ss.str();
   }
+  string get_pull_argument() const { return string(); }
+  string pull(const string&) const { return string(); }
+  void push(const string&) {}
   void save(ostream&) {}
   void load(istream&) {}
   void clear() {}
