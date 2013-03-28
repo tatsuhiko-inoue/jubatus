@@ -1,11 +1,13 @@
+# -*- python -*-
 import Options
 
 subdirs = '''
 common plugin stat
-classifier fv_converter recommender regression storage
+classifier fv_converter recommender regression storage nearest_neighbor
 framework server
 cmd jubavisor
 graph
+table
 '''
 
 def options(opt):
